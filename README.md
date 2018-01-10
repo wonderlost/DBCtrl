@@ -1,2 +1,2 @@
 # DBCtrl
-基于ROS的单兵控制
+基于ROS的DB控制

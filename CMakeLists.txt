@@ -118,13 +118,15 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+  #include
+  src/${PROJECT_NAME}/src
   ${catkin_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
-#   src/${PROJECT_NAME}/dbctrl.cpp
+   #src/${PROJECT_NAME}/dbctrl.cpp
+   #src/${PROJECT_NAME}/advcan.cpp
 # )
 
 ## Add cmake target dependencies of the library
@@ -206,6 +208,8 @@ target_link_libraries(move_ctrl_pub ${catkin_LIBRARIES})
 add_executable(move_ctrl_sub src/move_ctrl_sub.cpp)
 target_link_libraries(move_ctrl_sub ${catkin_LIBRARIES})
 
-
 add_executable(timed_out_and_back src/timed_out_and_back.cpp)
 target_link_libraries(timed_out_and_back ${catkin_LIBRARIES})
+
+add_executable(robotctrl_side src/robotctrl_side.cpp)
+target_link_libraries(robotctrl_side ${catkin_LIBRARIES})

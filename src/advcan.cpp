@@ -2,7 +2,7 @@
 
 struct sockaddr_can addr;
 struct ifreq ifr;
-int canfd;
+int canfd = -1;
 
 void InitialCAN(const char *device, int baud_rate)
 {

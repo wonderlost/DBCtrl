@@ -4,6 +4,7 @@
 #include <ros/ros.h>
 #include <geometry_msgs/Twist.h>
 #include <math.h>
+#include "dbctrl/can_msg.h"
 #include "advcan.h"
 
 typedef struct tagCarSpeed
@@ -44,6 +45,7 @@ CarSpeed speedTrans(double linearSpeed, double angularSpeed)
     return cs;
 }
 
+// 控制小车运动通过CAN总线发出去
 void callback(const geometry_msgs::Twist &tw)
 {
     geometry_msgs::Twist tmp = tw;
@@ -66,8 +68,28 @@ int main(int argc, char  *argv[]) {
     // 订阅/cmd_vel主题，通过回调函数控制小车运动
     ros::Subscriber sub = nh.subscribe("/cmd_vel", 1, callback);
 
-    ros::spin();
+    ros::Publisher pub = nh.advertise<dbctrl::can_msg>("/can_msg", 1);
 
+    ros::Rate loop(100);
+
+    while (nh.ok())
+    {
+        dbctrl::can_msg candata;
+        CanMsg frame;
+        int readNum = ReadCAN(&frame);  // 读取一帧CAN数据
+        if (readNum > 0)    // 读取成功
+        {
+            candata.ID = frame.ID;
+            candata.LEN = frame.LEN;
+            for (int i = 0; i < frame.LEN; i++)
+            {
+                candata.DATA[i] = frame.DATA[i];
+            }
+            pub.publish(candata);
+        }
+
+        ros::spinOnce();
+    }
 
     return 0;
 }

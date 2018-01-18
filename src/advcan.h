@@ -29,7 +29,7 @@ int ReadCAN(CanMsg *read_frame);
 
 struct sockaddr_can addr;
 struct ifreq ifr;
-int canfd;
+int canfd = -1;
 
 void InitialCAN(const char *device, int baud_rate)
 {
@@ -62,12 +62,17 @@ void InitialCAN(const char *device, int baud_rate)
     if (ret != 0)
         perror("set sock opt failed.");
 
-    printf("%f open success.\n", device);
+    printf("%s open success.\n", device);
 }
 
 
 int WriteCAN(CanMsg write_frame)
 {
+	if (canfd == -1)
+	{
+		perror("CAN Initial Error.\n");
+		return 0;
+	}
     int ret = 0;
     struct can_frame frame;
     memset(&frame, 0, sizeof(can_frame));
@@ -83,6 +88,11 @@ int WriteCAN(CanMsg write_frame)
 
 int ReadCAN(CanMsg *read_frame)
 {
+	if (canfd == -1)
+	{
+		perror("CAN Initial Error.\n");
+		return 0;
+	}
     int ret = 0;
     struct can_frame frame;
     memset(&frame, 0, sizeof(can_frame));

@@ -12,22 +12,23 @@ typedef struct tagCarSpeed
     int right_speed;
 }CarSpeed;
 
+// DB小车轮距和轴距（旧车）
 const double wheel_dis = 0.398;     // 轮距(m)
 const double wheel_radius = 0.0958;  // 轮子半径(m)
-
+const int MaxSpeed = 45;
 /*
 线速度、角速度===》左轮速度、右轮速度
 */
-CarSpeed speedTrans(double linearSpsed, double angularSpeed)
+CarSpeed speedTrans(double linearSpeed, double angularSpeed)
 {
-    double speedR = (linearSpsed + (wheel_dis * angularSpeed)/2) / wheel_radius;
-    double speedL = (linearSpsed - (wheel_dis * angularSpeed)/2) / wheel_radius;
+    double speedR = (linearSpeed + (wheel_dis * angularSpeed)/2) / wheel_radius;
+    double speedL = (linearSpeed - (wheel_dis * angularSpeed)/2) / wheel_radius;
 
-    speedR = speedR > 45 ? 45 : speedR;     // 限速
-    speedR = speedR < -45 ? -45 : speedR;
+    speedR = speedR > MaxSpeed ? MaxSpeed : speedR;     // 限速
+    speedR = speedR < -MaxSpeed ? -MaxSpeed : speedR;
 
-    speedL = speedL > 45 ? 45 : speedL;
-    speedL = speedL < -45 ? -45 : speedL;
+    speedL = speedL > MaxSpeed ? MaxSpeed : speedL;
+    speedL = speedL < -MaxSpeed ? -MaxSpeed : speedL;
 
     CarSpeed cs;
     if (speedR >= 0)
@@ -62,6 +63,7 @@ int main(int argc, char  *argv[]) {
     ros::init(argc, argv, "move_sub");
     ros::NodeHandle nh;
 
+    // 订阅/cmd_vel主题，通过回调函数控制小车运动
     ros::Subscriber sub = nh.subscribe("/cmd_vel", 1, callback);
 
     ros::spin();

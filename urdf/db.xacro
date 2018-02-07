@@ -1,0 +1,162 @@
+<?xml version="1.0"?>
+
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"
+    xmlns:sensor="http://playerstage.sourceforge.net/gazebo/xmlschema/#controller"
+    xmlns:interface="http://playerstage.sourceforge.net/gazebo/xmlschema/#interface"
+    name="db_xcaro">
+
+    <xacro:property name="length_wheel" value="0.08"    />
+    <xacro:property name="radius_wheel" value="0.085"   />
+    <xacro:macro name="default_inertial" params="mass">
+        <inertial>
+            <mass value="${mass}" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0"
+                    iyy="1.0" iyz="0.0"
+                    izz="1.0" />
+        </inertial>
+    </xacro:macro>
+    <xacro:macro name="default_wheel">
+        <geometry>
+            <cylinder length="0.08" radius="0.085"/>
+        </geometry>
+    </xacro:macro>
+
+
+    <link name="base_footprint" >
+        <visual>
+            <geometry>
+                <box size="0.001 0.001 0.001"   />
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+        </visual>
+        <xacro:default_inertial mass="0.001"    />
+    </link>
+    <!-- <xacro:include filename="'rospack find dbctrl'/urdf/robot.gazebo"  /> -->
+
+    <joint name="base_footprint_joint"   type="fixed">
+        <origin xyz="0 0 0" />
+        <parent link="base_footprint"   />
+        <child link="base_link" />
+    </joint>
+
+    <link name="base_link" >
+        <visual>
+            <geometry>
+                <box size="0.87 0.52 0.17"/>
+            </geometry>
+            <origin rpy="0 0 0" xyz="0 0 0.085" />
+            <material name="white">
+                <color rgba="1 1 1 1"   />
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.87 0.52 0.17"  />
+            </geometry>
+        </collision>
+        <xacro:default_inertial mass="27.2" />
+    </link>
+
+    <link name="wheel_up_left">
+        <visual>
+            <xacro:default_wheel    />
+            <origin rpy="1.57079 0 0" xyz="0.426 0.26 0"    />
+            <material name="black">
+                <color rgba="0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <xacro:default_wheel    />
+        </collision>
+        <xacro:default_inertial mass="2.0"  />
+    </link>
+
+    <joint name="base_to_up_left" type="fixed">
+        <parent link="base_link"   />
+        <child link="wheel_up_left" />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <link name="wheel_up_right">
+        <visual>
+            <xacro:default_wheel    />
+            <origin rpy="1.57079 0 0" xyz="0.426 -0.26 0"   />
+            <material name="black"  />
+        </visual>
+        <collision>
+            <xacro:default_wheel />
+        </collision>
+        <xacro:default_inertial mass="2.0"  />
+    </link>
+
+    <joint name="base_to_up_right" type="fixed" >
+        <parent link="base_link"   />
+        <child link="wheel_up_right"    />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <link name="wheel_rear_left" >
+        <visual>
+            <xacro:default_wheel    />
+            <origin rpy="1.57079 0 0" xyz="-0.426 0.26 0"   />
+            <material name="black"  />
+        </visual>
+        <collision>
+            <xacro:default_wheel    />
+        </collision>
+        <xacro:default_inertial mass="2.0"  />
+    </link>
+
+    <joint name="base_to_rear_left" type="fixed">
+        <parent link="base_link"  />
+        <child link="wheel_rear_left"   />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <link name="wheel_rear_right"   >
+        <visual>
+            <xacro:default_wheel    />
+            <origin rpy="1.57079 0 0" xyz="-0.426 -0.26 0"/>
+            <material name="black"  />
+        </visual>
+        <collision>
+            <xacro:default_wheel    />
+        </collision>
+        <xacro:default_inertial mass="2.0"  />
+    </link>
+
+    <joint name="base_to_rear_right" type="fixed">
+        <parent link="base_link"   />
+        <child link="wheel_rear_right"  />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <!-- Hokuyo Laser -->
+    <link name="hokuyo_link"    >
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <box size="0.1 .1 .1"/>
+            </geometry>
+        </collision>
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <mesh filename="package://dbctrl/meshes/hokuyo.dae"/>
+            </geometry>
+        </visual>
+        <inertial>
+            <mass value="1e-5"  />
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6"/>
+        </inertial>
+    </link>
+
+    <joint name="hokuyo_joint" type="fixed" >
+        <axis xyz="0 0 1"   />
+        <origin rpy="0 0 0" xyz="0.385 0 0.22" />
+        <parent link="base_link"   />
+        <child link="hokuyo_link"   />
+    </joint>
+
+</robot>

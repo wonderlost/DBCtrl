@@ -1,0 +1,126 @@
+<?xml version = "1.0"?>
+<robot name = "DBRobot">
+    <link name = "base_link">
+        <visual>
+            <geometry>
+                <box size = "0.87 0.52 0.17"/>
+            </geometry>
+            <origin rpy= "0 0 0" xyz="0 0 0.085"/>
+            <material name = "white">
+                <color rgba = "1 1 1 1" />
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <box size="0.87 0.52 0.17"  />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value = "27.2"    />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <link name = "wheel_up_left">
+        <visual>
+            <geometry>
+                <cylinder length = "0.08" radius = "0.085" />
+            </geometry>
+            <origin rpy = "1.57079 0 0" xyz = "0.426 0.26 0"   />
+            <material name = "black">
+                <color rgba = "0 0 0 1"/>
+            </material>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length = "0.08" radius = "0.085"/>
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value = "2"/>
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <joint name = "base_to_up_left" type = "fixed">
+        <parent link = "base_link"  />
+        <child link = "wheel_up_left"   />
+        <origin xyz = "0 0 0"  />
+    </joint>
+
+    <link name="wheel_up_right">
+        <visual>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+            <origin rpy="1.57079 0 0" xyz="0.426 -0.26 0"   />
+            <material name="black"  />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="2" />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <joint name="base_to_up_right" type="fixed">
+        <parent link="base_link"    />
+        <child link="wheel_up_right"    />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <link name="wheel_rear_left" >
+        <visual>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+            <origin rpy="1.57079 0 0" xyz="-0.426 0.26 0"   />
+            <material name="black" />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="2.0"   />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <joint name="base_to_rear_left" type="fixed">
+        <parent link="base_link"    />
+        <child link="wheel_rear_left"   />
+        <origin xyz="0 0 0" />
+    </joint>
+
+    <link name="wheel_rear_right">
+        <visual>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+            <origin rpy="1.57079 0 0" xyz="-0.426 -0.26 0"/>
+            <material name="black"  />
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder length="0.08" radius="0.085"  />
+            </geometry>
+        </collision>
+        <inertial>
+            <mass value="2.0"   />
+            <inertia ixx="1.0" ixy="0.0" ixz="0.0" iyy="1.0" iyz="0.0" izz="1.0" />
+        </inertial>
+    </link>
+
+    <joint name="base_to_rear_right" type="fixed" >
+        <parent link="base_link"    />
+        <child link="wheel_rear_right"  />
+        <origin xyz="0 0 0" />
+    </joint>
+
+</robot>
